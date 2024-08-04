@@ -8,16 +8,15 @@ class CustomTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.centerRight,
-      child: TextButton(
-          style: const ButtonStyle(alignment: Alignment.centerRight),
-          onPressed: onPressed,
+    return InkWell(
+        onTap: onPressed,
+        child: Padding(
+          padding: const EdgeInsets.all(0.0),
           child: Text(
             label,
             style:
-                const TextStyle(color: ColorUtility.deepYellow, fontSize: 20),
-          )),
-    );
+                const TextStyle(color: ColorUtility.deepYellow, fontSize: 15),
+          ),
+        ));
   }
 }

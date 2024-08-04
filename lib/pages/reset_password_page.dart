@@ -3,7 +3,7 @@ import 'package:edu_vista/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 
 class ResetPasswordPage extends StatefulWidget {
-  static String id = 'resetPassword';
+  static const String id = 'resetPassword';
   const ResetPasswordPage({super.key});
 
   @override

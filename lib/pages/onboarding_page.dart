@@ -1,4 +1,7 @@
+import 'package:edu_vista/pages/login_page.dart';
+import 'package:edu_vista/services/pref.service.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
+import 'package:edu_vista/widgets/custom_elevated_button.dart';
 import 'package:edu_vista/widgets/onboarding/elevated_button_rounded.dart';
 import 'package:edu_vista/widgets/onboarding/onboard_indicator.dart';
 import 'package:edu_vista/utils/image_utility.dart';
@@ -6,13 +9,15 @@ import 'package:edu_vista/widgets/onboarding/onboard_item_widget.dart';
 import 'package:flutter/material.dart';
 // import 'package:smooth_page_indicator/smooth_page_indicator.dart'
 
-class OnBoardingpage extends StatefulWidget {
-  static String id = 'OnBoardingpage';
+class OnBoardingPage extends StatefulWidget {
+  static const String id = 'OnBoardingPage';
+
+  const OnBoardingPage({super.key});
   @override
-  _OnBoardingpageState createState() => _OnBoardingpageState();
+  _OnBoardingPageState createState() => _OnBoardingPageState();
 }
 
-class _OnBoardingpageState extends State<OnBoardingpage> {
+class _OnBoardingPageState extends State<OnBoardingPage> {
   PageController _pageController = PageController();
   int currentIndex = 0;
 
@@ -45,22 +50,30 @@ class _OnBoardingpageState extends State<OnBoardingpage> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: currentIndex == 3
-                  ? const SizedBox.shrink()
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                            onPressed: () {
-                              skipFunction(3);
-                            },
-                            child: const Text(
-                              'Skip',
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.w400),
-                            )),
-                      ],
-                    ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  currentIndex == 3
+                      ? TextButton(
+                          onPressed: () {
+                            _skipFunction(2);
+                          },
+                          child: const Text(
+                            'Back',
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w400),
+                          ))
+                      : TextButton(
+                          onPressed: () {
+                            _skipFunction(3);
+                          },
+                          child: const Text(
+                            'Skip',
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w400),
+                          )),
+                ],
+              ),
             ),
             const SizedBox(
               height: 50,
@@ -134,43 +147,7 @@ class _OnBoardingpageState extends State<OnBoardingpage> {
                 const SizedBox(
                   height: 80,
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      currentIndex == 0
-                          ? const Text('')
-                          : ElevatedButtonRounded(
-                              onPressed: () {
-                                previousFunction();
-                              },
-                              icon: const Icon(
-                                Icons.arrow_back,
-                                size: 30,
-                              ),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                ColorUtility.grayLight,
-                              ),
-                            ),
-                      currentIndex == 3
-                          ? SizedBox.shrink()
-                          : ElevatedButtonRounded(
-                              onPressed: () {
-                                nextFunction();
-                              },
-                              icon: const Icon(
-                                Icons.arrow_forward,
-                                size: 30,
-                              ),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                ColorUtility.deepYellow,
-                              ),
-                            ),
-                    ],
-                  ),
-                ),
+                getButtons
               ],
             )),
           ],
@@ -178,6 +155,45 @@ class _OnBoardingpageState extends State<OnBoardingpage> {
       ),
     );
   }
+
+  Widget get getButtons => currentIndex == 3
+      ? CustomElevatedButton(onPressed: () => onLogin(), text: 'Login')
+      : Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              currentIndex == 0 || currentIndex == 3
+                  ? const Text('')
+                  : ElevatedButtonRounded(
+                      onPressed: () {
+                        previousFunction();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        size: 30,
+                      ),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        ColorUtility.grayLight,
+                      ),
+                    ),
+              currentIndex == 3
+                  ? SizedBox.shrink()
+                  : ElevatedButtonRounded(
+                      onPressed: () {
+                        nextFunction();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_forward,
+                        size: 30,
+                      ),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        ColorUtility.deepYellow,
+                      ),
+                    ),
+            ],
+          ),
+        );
 
   nextFunction() {
     _pageController.nextPage(duration: _kDuration, curve: _kCurve);
@@ -187,7 +203,12 @@ class _OnBoardingpageState extends State<OnBoardingpage> {
     _pageController.previousPage(duration: _kDuration, curve: _kCurve);
   }
 
-  skipFunction(int index) {
+  _skipFunction(int index) {
     _pageController.jumpToPage(index);
+  }
+
+  void onLogin() {
+    PreferencesService.isOnBoardingSeen = true;
+    Navigator.pushReplacementNamed(context, LoginPage.id);
   }
 }

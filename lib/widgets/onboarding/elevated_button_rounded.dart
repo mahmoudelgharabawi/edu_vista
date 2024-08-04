@@ -1,4 +1,3 @@
-import 'package:edu_vista/utils/color_utilis.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
