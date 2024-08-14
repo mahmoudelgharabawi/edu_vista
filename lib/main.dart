@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:edu_vista/cubit/auth_cubit.dart';
+import 'package:edu_vista/firebase_options.dart';
 import 'package:edu_vista/pages/home_page.dart';
 import 'package:edu_vista/pages/login_page.dart';
 import 'package:edu_vista/pages/onboarding_page.dart';
@@ -8,12 +10,24 @@ import 'package:edu_vista/pages/signup_page.dart';
 import 'package:edu_vista/pages/splash_page.dart';
 import 'package:edu_vista/services/pref.service.dart';
 import 'package:edu_vista/utils/color_utilis.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PreferencesService.init();
-  runApp(const MyApp());
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    print('Failed to initialize Firebase: $e');
+  }
+  runApp(MultiBlocProvider(
+    providers: [BlocProvider(create: (ctx) => AuthCubit())],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

@@ -7,9 +7,9 @@ import 'package:edu_vista/widgets/custom_text_form_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class AuthTemplateWidget extends StatelessWidget {
-  final void Function()? onLogin;
-  final void Function()? onSignUp;
+class AuthTemplateWidget extends StatefulWidget {
+  final Future<void> Function()? onLogin;
+  final Future<void> Function()? onSignUp;
   final Widget body;
   AuthTemplateWidget(
       {this.onLogin, this.onSignUp, required this.body, super.key}) {
@@ -17,11 +17,20 @@ class AuthTemplateWidget extends StatelessWidget {
         'onLogin or onSignUp should not be null');
   }
 
+  @override
+  State<AuthTemplateWidget> createState() => _AuthTemplateWidgetState();
+}
+
+class _AuthTemplateWidgetState extends State<AuthTemplateWidget> {
   EdgeInsetsGeometry get _padding =>
       const EdgeInsets.symmetric(vertical: 20, horizontal: 20);
-  bool get isLogin => onLogin != null;
+
+  bool get isLogin => widget.onLogin != null;
 
   String get title => isLogin ? "Login" : "Sign Up";
+
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -153,7 +162,7 @@ class AuthTemplateWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    body,
+                    widget.body,
                     CustomTextButton(
                       label: 'Forgot Password ?',
                       onPressed: () {},
@@ -163,12 +172,35 @@ class AuthTemplateWidget extends StatelessWidget {
                         Expanded(
                           child: CustomElevatedButton(
                             horizontal: 0,
-                            onPressed: isLogin ? onLogin! : onSignUp!,
-                            child: Text(
-                              title,
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w700),
-                            ),
+                            onPressed: () async {
+                              if (isLogin) {
+                                setState(() {
+                                  _isLoading = true;
+                                });
+                                await widget.onLogin?.call();
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                              } else {
+                                setState(() {
+                                  _isLoading = true;
+                                });
+                                await widget.onSignUp?.call();
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                              }
+                            },
+                            child: _isLoading
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : Text(
+                                    title,
+                                    style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700),
+                                  ),
                           ),
                         ),
                       ],
