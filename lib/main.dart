@@ -1,7 +1,9 @@
 import 'dart:ui';
 
+import 'package:edu_vista/blocs/course/course_bloc.dart';
 import 'package:edu_vista/cubit/auth_cubit.dart';
 import 'package:edu_vista/firebase_options.dart';
+import 'package:edu_vista/pages/course_details_page.dart';
 import 'package:edu_vista/pages/home_page.dart';
 import 'package:edu_vista/pages/login_page.dart';
 import 'package:edu_vista/pages/onboarding_page.dart';
@@ -25,7 +27,10 @@ void main() async {
     print('Failed to initialize Firebase: $e');
   }
   runApp(MultiBlocProvider(
-    providers: [BlocProvider(create: (ctx) => AuthCubit())],
+    providers: [
+      BlocProvider(create: (ctx) => AuthCubit()),
+      BlocProvider(create: (ctx) => CourseBloc()),
+    ],
     child: const MyApp(),
   ));
 }
@@ -48,7 +53,7 @@ class MyApp extends StatelessWidget {
       ),
       onGenerateRoute: (settings) {
         final String routeName = settings.name ?? '';
-        final Map? data = settings.arguments as Map?;
+        final dynamic data = settings.arguments;
         switch (routeName) {
           case LoginPage.id:
             return MaterialPageRoute(builder: (context) => LoginPage());
@@ -60,6 +65,11 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(builder: (context) => OnBoardingPage());
           case HomePage.id:
             return MaterialPageRoute(builder: (context) => HomePage());
+          case CourseDetailsPage.id:
+            return MaterialPageRoute(
+                builder: (context) => CourseDetailsPage(
+                      course: data,
+                    ));
 
           default:
             return MaterialPageRoute(builder: (context) => SplashPage());

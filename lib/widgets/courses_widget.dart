@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edu_vista/models/course.dart';
+import 'package:edu_vista/pages/course_details_page.dart';
 import 'package:flutter/material.dart';
 
 class CoursesWidget extends StatefulWidget {
@@ -57,14 +58,20 @@ class _CoursesWidgetState extends State<CoursesWidget> {
             shrinkWrap: true,
             crossAxisCount: 2,
             children: List.generate(courses.length, (index) {
-              return Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: const Color(0xffE0E0E0),
-                  borderRadius: BorderRadius.circular(40),
-                ),
-                child: Center(
-                  child: Text(courses[index].title ?? 'No Name'),
+              return InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, CourseDetailsPage.id,
+                      arguments: courses[index]);
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xffE0E0E0),
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  child: Center(
+                    child: Text(courses[index].title ?? 'No Name'),
+                  ),
                 ),
               );
             }),

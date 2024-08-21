@@ -42,14 +42,16 @@ class _HomePageState extends State<HomePage> {
               const CoursesWidget(
                 rankValue: 'top rated',
               ),
-              ElevatedButton(
-                  onPressed: () async {
-                    await FirebaseFirestore.instance
-                        .collection('test')
-                        .doc('x')
-                        .delete();
-                  },
-                  child: Text('test'))
+              const SizedBox(
+                height: 20,
+              ),
+              LabelWidget(
+                name: 'Top Seller Courses',
+                onSeeAllClicked: () {},
+              ),
+              const CoursesWidget(
+                rankValue: 'top seller',
+              ),
             ],
           ),
         ),
