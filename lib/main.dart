@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:edu_vista/blocs/course/course_bloc.dart';
+import 'package:edu_vista/blocs/lecture/lecture_bloc.dart';
 import 'package:edu_vista/cubit/auth_cubit.dart';
 import 'package:edu_vista/firebase_options.dart';
 import 'package:edu_vista/pages/course_details_page.dart';
@@ -15,6 +16,7 @@ import 'package:edu_vista/utils/color_utilis.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,10 +28,13 @@ void main() async {
   } catch (e) {
     print('Failed to initialize Firebase: $e');
   }
+  await dotenv.load(fileName: ".env");
+
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(create: (ctx) => AuthCubit()),
       BlocProvider(create: (ctx) => CourseBloc()),
+      BlocProvider(create: (ctx) => LectureBloc()),
     ],
     child: const MyApp(),
   ));

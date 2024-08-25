@@ -48,14 +48,20 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
                 separatorBuilder: (context, index) => const SizedBox(
                   width: 10,
                 ),
-                itemBuilder: (context, index) => Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: const Color(0xffE0E0E0),
-                    borderRadius: BorderRadius.circular(40),
-                  ),
-                  child: Center(
-                    child: Text(categories[index].name ?? 'No Name'),
+                itemBuilder: (context, index) => InkWell(
+                  onTap: () async {
+                    // Todo add navigation to open new page has all courses related to this category
+                    ;
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xffE0E0E0),
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                    child: Center(
+                      child: Text(categories[index].name ?? 'No Name'),
+                    ),
                   ),
                 ),
               );
